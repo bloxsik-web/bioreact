@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>l1mix</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+    --glass:rgba(13, 23, 12, 0.49);
+    --text:rgba(215,227,219,0.92);
+    --contacts:rgba(255,255,255,0.82);
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Inter,Arial,sans-serif;
+    background:#000;
+}
+
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:24px;
+}
+
+.bg{
+    position:absolute;
+    inset:0;
+    background:url("assets/lback.png") center center/cover no-repeat;
+    transform:scale(1.03);
+}
+
+.bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at 50% 20%,rgba(72, 255, 127, 0.096),transparent 40%),
+    radial-gradient(circle at 20% 80%,rgba(60, 255, 0, 0.1),transparent 35%),
+    radial-gradient(circle at 80% 75%,rgba(95, 255, 80, 0.1),transparent 35%),
+    rgba(0,0,0,0.18);
+    backdrop-filter:blur(2px);
+}
+
+.card{
+    position:relative;
+    width:690px;
+    padding:28px;
+    border-radius:28px;
+    background:var(--glass);
+    backdrop-filter:blur(30px) saturate(140%);
+    -webkit-backdrop-filter:blur(30px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow:0 24px 80px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.03);
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:28px;
+    background:linear-gradient(135deg,rgba(255,255,255,0.08),transparent 18%,transparent 82%,rgba(255,255,255,0.03));
+    pointer-events:none;
+}
+
+.glow{
+    position:absolute;
+    width:450px;
+    height:450px;
+    border-radius:50%;
+    background:rgba(88,255,94,0.08);
+    filter:blur(120px);
+    z-index:-1;
+}
+
+.glow.one{top:-160px;left:-160px}
+.glow.two{bottom:-180px;right:-180px}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+}
+
+.profile{
+    display:flex;
+    gap:20px;
+    min-width:0;
+}
+
+.avatar{
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    object-fit:cover;
+    flex-shrink:0;
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.info{min-width:0}
+
+.nickname{
+    color:var(--text);
+    font-size:64px;
+    line-height:0.9;
+    font-weight:300;
+    letter-spacing:-2px;
+    white-space:nowrap;
+}
+
+.subtitle{
+    margin-top:12px;
+    color:var(--text);
+    font-size:18px;
+    line-height:1.35;
+}
+
+.right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+    flex-shrink:0;
+}
+
+.uid{
+    padding:10px 15px;
+    border-radius:13px;
+    background:var(--glass);
+    color:var(--text);
+    font-size:19px;
+    font-weight:500;
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.03);
+}
+
+.badges{
+    display:flex;
+    gap:7px;
+}
+
+.badge{
+    width:36px;
+    height:36px;
+    border-radius:11px;
+    background:var(--glass);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.03);
+}
+
+.badge img{
+    width:18px;
+    height:18px;
+    object-fit:contain;
+}
+
+.bottom{margin-top:28px}
+
+.contacts{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.contact{
+    min-height:60px;
+    padding:0 18px;
+    border-radius:16px;
+    background:var(--glass);
+    display:flex;
+    align-items:center;
+    gap:14px;
+    backdrop-filter:blur(22px);
+    border:1px solid rgba(255,255,255,0.03);
+    overflow:hidden;
+    transition:0.2s ease;
+}
+
+.contact:hover{
+    transform:translateY(-1px);
+    background:rgba(28,31,18,0.58);
+}
+
+.contact img{
+    width:22px;
+    height:22px;
+    object-fit:contain;
+    flex-shrink:0;
+}
+
+.contact span{
+    color:var(--contacts);
+    font-size:18px;
+    font-weight:500;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.music{
+    margin-top:16px;
+    width:100%;
+    min-height:118px;
+    padding:14px 16px;
+    border-radius:18px;
+    background:var(--glass);
+    display:flex;
+    align-items:center;
+    gap:16px;
+    backdrop-filter:blur(22px);
+    border:1px solid rgba(255,255,255,0.03);
+}
+
+.music-cover{
+    width:88px;
+    height:88px;
+    border-radius:15px;
+    object-fit:cover;
+    flex-shrink:0;
+}
+
+.music-info{
+    min-width:0;
+    flex:1;
+}
+
+.music-title{
+    color:var(--text);
+    font-size:21px;
+    line-height:1.12;
+    font-weight:500;
+}
+
+.music-author{
+    margin-top:4px;
+    color:rgba(215,227,219,0.72);
+    font-size:16px;
+}
+
+.music-row{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.play-btn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:13px;
+    background:rgba(20,23,12,0.62);
+    color:var(--contacts);
+    font-size:18px;
+    cursor:pointer;
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.04);
+    transition:0.2s ease;
+    flex-shrink:0;
+}
+
+.play-btn:hover{
+    transform:scale(1.04);
+    background:rgba(28,31,18,0.68);
+}
+
+.music-time{
+    color:rgba(255,255,255,0.62);
+    font-size:15px;
+    min-width:92px;
+}
+
+.progress{
+    width:100%;
+    height:7px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.12);
+    overflow:hidden;
+    cursor:pointer;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+    border-radius:999px;
+    background:rgba(215,227,219,0.75);
+}
+
+@media(max-width:760px){
+    .card{
+        width:100%;
+        max-width:760px;
+    }
+}
+
+@media(max-width:650px){
+    body{padding:18px}
+
+    .top{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .right{
+        width:100%;
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .contacts{
+        grid-template-columns:1fr;
+    }
+
+    .nickname{
+        font-size:52px;
+    }
+}
+
+@media(max-width:480px){
+    .card{
+        padding:20px;
+        border-radius:22px;
+    }
+
+    .avatar{
+        width:72px;
+        height:72px;
+    }
+
+    .nickname{
+        font-size:42px;
+    }
+
+    .subtitle{
+        font-size:16px;
+    }
+
+    .music{
+        padding:14px;
+    }
+
+    .music-cover{
+        width:78px;
+        height:78px;
+    }
+
+    .music-title{
+        font-size:18px;
+    }
+
+    .contact{
+        min-height:56px;
+    }
+
+    .contact span{
+        font-size:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="card">
+
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+
+    <div class="top">
+
+        <div class="profile">
+            <img src="assets/l1mix.png" class="avatar">
+
+            <div class="info">
+                <div class="nickname">l1mix</div>
+                <div class="subtitle">
+                    Java coder<br>
+                    creator minecraft servers
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="uid">uid: 3</div>
+
+            <div class="badges">
+                <div class="badge"><img src="assets/b/dev.png"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom">
+        <div class="contacts">
+
+            <div class="contact">
+                <img src="assets/discord.png">
+                <span>l1mix1337</span>
+            </div>
+
+            <div class="contact">
+                <img src="assets/tg.png">
+                <span>@pxiha</span>
+            </div>
+
+            <div class="contact">
+                <img src="assets/roblox.png">
+                <span>???</span>
+            </div>
+
+            <div class="contact">
+                <img src="assets/devid.png">
+                <span>l1mix</span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="music">
+
+        <img src="assets/music/platina.png" class="music-cover">
+
+        <div class="music-info">
+            <div class="music-title">Бандана</div>
+            <div class="music-author">Платина</div>
+
+            <div class="music-row">
+                <button class="play-btn" id="playBtn">▶</button>
+
+                <div class="music-time">
+                    <span id="currentTime">00:00</span>/<span id="duration">01:49</span>
+                </div>
+
+                <div class="progress" id="progress">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <audio id="audio" src="assets/music/platina.mp3"></audio>
+
+    </div>
+
+</div>
+
+<script>
+const card = document.querySelector('.card');
+
+document.addEventListener('mousemove', (e)=>{
+    const x = (window.innerWidth / 2 - e.clientX) / 45;
+    const y = (window.innerHeight / 2 - e.clientY) / 45;
+
+    card.style.transform = `
+        perspective(1200px)
+        rotateY(${-x}deg)
+        rotateX(${y}deg)
+    `;
+});
+
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('playBtn');
+const currentTimeEl = document.getElementById('currentTime');
+const durationEl = document.getElementById('duration');
+const progress = document.getElementById('progress');
+const progressFill = document.getElementById('progressFill');
+
+function formatTime(seconds){
+    if(isNaN(seconds)) return "00:00";
+
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+
+    return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+playBtn.addEventListener('click', ()=>{
+    if(audio.paused){
+        audio.play();
+        playBtn.textContent = "⏸";
+    }else{
+        audio.pause();
+        playBtn.textContent = "▶";
+    }
+});
+
+audio.addEventListener('loadedmetadata', ()=>{
+    durationEl.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener('timeupdate', ()=>{
+    currentTimeEl.textContent = formatTime(audio.currentTime);
+
+    const percent = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = `${percent}%`;
+});
+
+audio.addEventListener('ended', ()=>{
+    playBtn.textContent = "▶";
+    progressFill.style.width = "0%";
+    currentTimeEl.textContent = "00:00";
+});
+
+progress.addEventListener('click', (e)=>{
+    const rect = progress.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percent = clickX / rect.width;
+
+    audio.currentTime = percent * audio.duration;
+});
+</script>
+
+</body>
+</html>
